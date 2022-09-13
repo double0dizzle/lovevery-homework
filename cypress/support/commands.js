@@ -10,7 +10,7 @@ Cypress.Commands.add('login', (username, password) => {
     cy.get('#password').clear();
     cy.get('#password').type(password);
     cy.wait(1000);
-    cy.get('#form-submit-button').click();
+    cy.get('#form-submit-button').click({ force: true });
     cy.wait(1000);
 })
 
