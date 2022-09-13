@@ -150,3 +150,16 @@
     - Severity: S4
 
     - Reporter: Mike Dickmann
+
+
+### Anti-patterns
+
+- Unfortunately I had to go with a few anti-patterns in this project, which I've mentioned already, but will elaborate more on here.
+
+    - Logging in with the UI: The correct way would have been to set the user login state by making a network call in the beforeEach hook, but I did not have the payload information. This led me to use the UI instead, which caused me to use a 2nd anti-pattern: multiple cy.waits.
+
+    - Using multiple waits in the login function: Because I have to use the UI to login, some XHR requests on login are being aborted, and I have to use waits strategically to allow other requests on page-load to finish before entering the user credentials and signing in. This is not an elegant solution, or even a good fix, because the first test almost always fails on the first run, but then tests will pass after refreshing the runner. I cannot replicate this issue manually though outside of Cypress, so there is something in Cypress's software causing those requests to abort. There's also an open issue with cypress that's similar to this, which they're investigating.
+
+    - Selecting elements by their text and IDs, rather than by special attributes meant for testing: Using special attributes meant for testing purposes are the best way to build resilient tests because they're not impacted by other front-end changes such as an ID or class name would be. However, for the purposes of this project, using element text works fine and which is what I used the majority of the time. Text is a little more isolated from changes than IDs are, but I was forced to use IDs in some cases where element text was duplicated on a page. I didn't use any other type of selectors as they tend to be too generic and brittle.
+
+    - Not stubbing data: Because I don't have access to payload information or JSON contracts, stubbing, or using any fixture file wasn't an option for me. This causes testing to go much slower, as I must use the UI and wait for actual responses to resolve.

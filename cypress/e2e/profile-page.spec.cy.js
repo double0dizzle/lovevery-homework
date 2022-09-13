@@ -1,6 +1,7 @@
 describe('Lovevery Profile UI Validations', () => {
 
   beforeEach(() => {
+    cy.clearCookies();
     let user = Cypress.env("username");
     let pswd = Cypress.env("pswd");
     Cypress.on('uncaught:exception', (err, runnable) => {
@@ -16,7 +17,6 @@ describe('Lovevery Profile UI Validations', () => {
   it('Validates Profile-Info Page Elements', () => {
     cy.wait(3000);
     cy.get('#my-account-popover').should('be.visible');
-    cy.contains('This subscription has been canceled');
     //Validates side-menu elements
     cy.get('.css-1a01rea').should('be.visible');
     cy.contains('Subscription').should('be.visible').and('not.be.disabled');
