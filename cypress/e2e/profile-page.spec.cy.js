@@ -10,12 +10,21 @@ describe('Lovevery Profile UI Validations', () => {
     cy.login(user, pswd);
   });
 
-  afterEach(() => {
+  after(() => {
     cy.logout();
   });
 
-  it('Validates Profile-Info Page Elements', () => {
+  it('Loads Page And Validates URL', () => {
+    //this test block expects the xhr requests to abort and keep user on login page
     cy.wait(3000);
+    cy.url().should('include', 'lovevery');
+    cy.contains('Courses').should('be.visible');
+    cy.contains('Forgot Password?').should('be.enabled');
+    cy.visit('/')
+  });
+
+  it('Validates Profile-Info Page Elements', () => {
+    cy.wait(5000);
     cy.get('#my-account-popover').should('be.visible');
     //Validates side-menu elements
     cy.get('.css-1a01rea').should('be.visible');
